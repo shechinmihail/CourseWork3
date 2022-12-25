@@ -16,10 +16,7 @@ public class JavaQuestionService implements QuestionService{
 
     @PostConstruct
     private void listQuestions(){
-        questions.add(new Question("Вопрос 1","Ответ 1"));
-        questions.add(new Question("Вопрос 2","Ответ 2"));
-        questions.add(new Question("Вопрос 3","Ответ 3"));
-        questions.add(new Question("Вопрос 4","Ответ 4"));
+
         questions.add(new Question("Вопрос 5","Ответ 5"));
         questions.add(new Question("Вопрос 6","Ответ 6"));
     }
@@ -27,10 +24,10 @@ public class JavaQuestionService implements QuestionService{
     @Override
     public Question add(String question, String answer) {
         if (question == null || question.isBlank()){
-            throw new RuntimeException("Введите вопрос");
+            throw new IllegalArgumentException("Введите вопрос");
         }
         if (answer == null || answer.isBlank()){
-            throw new RuntimeException("");
+            throw new IllegalArgumentException("Введите ответ");
         }
         return new Question(question, answer);
     }
@@ -38,7 +35,7 @@ public class JavaQuestionService implements QuestionService{
     @Override
     public Question add(Question question) {
         if (question == null){
-            throw new RuntimeException("Введите вопрос");
+            throw new IllegalArgumentException("Введите вопрос");
         }
         questions.add(question);
         return question;
@@ -47,7 +44,7 @@ public class JavaQuestionService implements QuestionService{
     @Override
     public Question remove(Question question) {
         if (!questions.contains(question)){
-            throw new RuntimeException("Вопрос не найден в списке");
+            throw new IllegalArgumentException("Вопрос не найден в списке");
         }
         questions.remove(question);
         return question;

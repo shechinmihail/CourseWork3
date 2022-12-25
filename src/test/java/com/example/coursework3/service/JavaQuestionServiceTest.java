@@ -1,63 +1,60 @@
 package com.example.coursework3.service;
 
 import com.example.coursework3.model.Question;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
+
 class JavaQuestionServiceTest {
 
-    @InjectMocks
-    private JavaQuestionService service;
+    private Set<Question> expected = new HashSet<>();
 
-    @Mock
-    Question question;
+    private Set<Question> actual = new HashSet<>();
 
     @BeforeEach
     void setUp(){
+    expected.add(new Question("Вопрос 1","Ответ 1"));
+    expected.add(new Question("Вопрос 2","Ответ 2"));
+    expected.add(new Question("Вопрос 3","Ответ 3"));
+    expected.add(new Question("Вопрос 4","Ответ 4"));
+
+    actual.add(new Question("Вопрос 1","Ответ 1"));
+    actual.add(new Question("Вопрос 2","Ответ 2"));
+    actual.add(new Question("Вопрос 3","Ответ 3"));
+    actual.add(new Question("Вопрос 4","Ответ 4"));
 
     }
 
     @Test
     void add() {
-        Question expected = new Question("Вопрос 1", "Ответ 1");
-        Question actual = service.add("Вопрос 1", "Ответ 1");
-        Assertions.assertThat(actual).isEqualTo(expected);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void testAdd() {
-        Question expected = new Question("Вопрос 1", "Ответ 1");
-        Question actual = service.add("Вопрос 1", "Ответ 1");
-        Assertions.assertThat(actual).isEqualTo(expected);
+        expected.add(new Question("Вопрос 777", "Ответ 777"));
+        actual.add(new Question("Вопрос 777", "Ответ 777"));
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void remove() {
-        Question expected = new Question("Вопрос 1", "Ответ 1");
-        //Question actual = service.remove(expected);
-        //Assertions.assertThat(actual).isEqualTo(expected);
+        expected.remove("test2");
+        actual.remove("test2");
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void getAll() {
-        assertTrue(service.getAll().isEmpty());
+        expected.size();
+        actual.size();
+        Assertions.assertEquals(expected, actual);
     }
 
-    @Test
-    void getRandomQestion() {
-        Question expected = new Question("Вопрос 1", "Ответ 1");
-        //assertEquals(QuestionService.getRandomQuestion(), expected);
-    }
 }
