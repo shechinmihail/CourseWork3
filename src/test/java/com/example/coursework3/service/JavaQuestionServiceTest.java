@@ -1,60 +1,82 @@
 package com.example.coursework3.service;
 
 import com.example.coursework3.model.Question;
-import org.junit.jupiter.api.Assertions;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.*;
 
 
 class JavaQuestionServiceTest {
 
-    private Set<Question> expected = new HashSet<>();
-
-    private Set<Question> actual = new HashSet<>();
+    private JavaQuestionService javaQuestionService;
 
     @BeforeEach
     void setUp(){
-    expected.add(new Question("Вопрос 1","Ответ 1"));
-    expected.add(new Question("Вопрос 2","Ответ 2"));
-    expected.add(new Question("Вопрос 3","Ответ 3"));
-    expected.add(new Question("Вопрос 4","Ответ 4"));
-
-    actual.add(new Question("Вопрос 1","Ответ 1"));
-    actual.add(new Question("Вопрос 2","Ответ 2"));
-    actual.add(new Question("Вопрос 3","Ответ 3"));
-    actual.add(new Question("Вопрос 4","Ответ 4"));
-
+        javaQuestionService = new JavaQuestionService();
+        javaQuestionService.add("Вопрос 1","Ответ 1");
+        javaQuestionService.add("Вопрос 2","Ответ 2");
+        javaQuestionService.add("Вопрос 3","Ответ 3");
+        javaQuestionService.add("Вопрос 4","Ответ 4");
+        javaQuestionService.add("Вопрос 5","Ответ 5");
     }
 
-    @Test
-    void add() {
-        Assertions.assertEquals(expected, actual);
+    @Test // add(String question, String answer)
+    void questionAlreadyExists() {
+        javaQuestionService.add("Вопрос 1","Ответ1 ");
+        Throwable thrown = catchThrowable(() -> javaQuestionService.add("Вопрос 1","Ответ 1"));
+       assertThat(thrown.getMessage()).isNotBlank();
     }
 
-    @Test
+    @Test // add(String question, String answer)
+    void addQuestion() {
+        Question expected = new Question("Вопрос 1","Ответ 1");
+        assertEquals(expected, javaQuestionService.add(expected));
+        assertFalse(javaQuestionService.getAll().isEmpty());
+    }
+
+    @Test // add(Question question)
     void testAdd() {
-        expected.add(new Question("Вопрос 777", "Ответ 777"));
-        actual.add(new Question("Вопрос 777", "Ответ 777"));
-        Assertions.assertEquals(expected, actual);
+        Question expected = new Question("Вопрос 1");
+        assertEquals(expected, javaQuestionService.add(expected));
+        assertFalse(javaQuestionService.getAll().isEmpty());
     }
 
-    @Test
-    void remove() {
-        expected.remove("test2");
-        actual.remove("test2");
-        Assertions.assertEquals(expected, actual);
+    @Test // remove
+    void shouldRemoveQuestion() {
+        Question expected = new Question("Вопрос 1","Ответ 1");
+        javaQuestionService.add(expected);
+        Question actual = javaQuestionService.remove(expected);
+        assertEquals(expected, actual);
+        assertTrue(javaQuestionService.getAll().isEmpty());
     }
 
-    @Test
-    void getAll() {
-        expected.size();
-        actual.size();
-        Assertions.assertEquals(expected, actual);
+    @Test // remove
+    void ifThereIsAQuestionRemove() {
+        Question expected = new Question("Вопрос 1","Ответ 1");
+        Throwable thrown = catchThrowable(() -> javaQuestionService.remove(expected));
+        assertThat(thrown.getMessage()).isNotBlank();
     }
+
+    @Test // getAll
+    void showCollectionOfExistingQuestions() {
+        Question expected = javaQuestionService.add("Вопрос 1","Ответ 1");
+        assertTrue(javaQuestionService.getAll().contains(expected));
+    }
+
+    @Test // getAll
+    void returnEmptyCollection() {
+        assertTrue(javaQuestionService.getAll().isEmpty());
+    }
+
+    @Test // getRandomQuestion
+    void showRandomQuestion() {
+        Question expected = javaQuestionService.add("Вопрос 1","Ответ 1");
+        assertEquals(javaQuestionService.getRandomQuestion(), expected);
+    }
+
 
 }
