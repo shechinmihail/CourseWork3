@@ -1,5 +1,6 @@
 package com.example.coursework3.service;
 
+import com.example.coursework3.exceptions.BadRequestException;
 import com.example.coursework3.model.Question;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class ExaminerServiceImpl implements ExaminerService {
     public Collection<Question> getQuestions(int amount) {
         Set<Question> result = new HashSet<>();
         if (amount > javaQuestionServices.getAll().size() || amount <= 0) {
-            throw new RuntimeException("Запрошено вопросов больше, чем есть в базе данных");
+            throw new BadRequestException("Запрошено вопросов больше, чем есть в базе данных");
         }
         while (result.size() < amount) {
             result.add(javaQuestionServices.getRandomQuestion());

@@ -1,5 +1,8 @@
 package com.example.coursework3.service;
 
+import com.example.coursework3.exceptions.BadRequestException;
+import com.example.coursework3.exceptions.QuestionAlreadyExistsException;
+import com.example.coursework3.exceptions.QuestionNotFoundException;
 import com.example.coursework3.model.Question;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
@@ -11,7 +14,7 @@ import java.util.Set;
 
 
 @Service
-public class JavaQuestionService implements QuestionService{
+public class JavaQuestionService implements QuestionService {
     private final Set<Question> questions = new HashSet<>();
     private Random random;
 
@@ -20,30 +23,30 @@ public class JavaQuestionService implements QuestionService{
     }
 
     @PostConstruct
-    private void listQuestions(){
-        questions.add(new Question("Вопрос 1","Ответ 1"));
-        questions.add(new Question("Вопрос 2","Ответ 2"));
-        questions.add(new Question("Вопрос 3","Ответ 3"));
-        questions.add(new Question("Вопрос 4","Ответ 4"));
-        questions.add(new Question("Вопрос 5","Ответ 5"));
-        questions.add(new Question("Вопрос 6","Ответ 6"));
+    private void listQuestions() {
+        questions.add(new Question("Вопрос 1", "Ответ 1"));
+        questions.add(new Question("Вопрос 2", "Ответ 2"));
+        questions.add(new Question("Вопрос 3", "Ответ 3"));
+        questions.add(new Question("Вопрос 4", "Ответ 4"));
+        questions.add(new Question("Вопрос 5", "Ответ 5"));
+        questions.add(new Question("Вопрос 6", "Ответ 6"));
     }
 
     @Override
     public Question add(String question, String answer) {
-        if (question == null || question.isBlank()){
-            throw new IllegalArgumentException("Введите вопрос");
+        if (question == null || question.isBlank()) {
+            throw new BadRequestException("Введите вопрос");
         }
-        if (answer == null || answer.isBlank()){
-            throw new IllegalArgumentException("Введите ответ");
+        if (answer == null || answer.isBlank()) {
+            throw new BadRequestException("Введите ответ");
         }
         return new Question(question, answer);
     }
 
     @Override
     public Question add(Question question) {
-        if (question == null){
-            throw new IllegalArgumentException("Введите вопрос");
+        if (questions.contains(question)) {
+            throw new QuestionAlreadyExistsException("Вопрос уже есть в списке");
         }
         questions.add(question);
         return question;
@@ -51,8 +54,8 @@ public class JavaQuestionService implements QuestionService{
 
     @Override
     public Question remove(Question question) {
-        if (!questions.contains(question)){
-            throw new IllegalArgumentException("Вопрос не найден в списке");
+        if (!questions.contains(question)) {
+            throw new QuestionNotFoundException("Вопрос не найден в списке");
         }
         questions.remove(question);
         return question;
@@ -67,8 +70,8 @@ public class JavaQuestionService implements QuestionService{
     public Question getRandomQuestion() {
         int questionNumber = getRandomInt(questions.size());
         int questionCurrent = 0;
-        for (Question question : questions){
-            if (questionCurrent == questionNumber){
+        for (Question question : questions) {
+            if (questionCurrent == questionNumber) {
                 return question;
             }
             questionCurrent++;
