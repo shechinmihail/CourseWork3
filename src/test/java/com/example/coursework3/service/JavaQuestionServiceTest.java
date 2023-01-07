@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
+
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -96,9 +96,9 @@ class JavaQuestionServiceTest {
     @Test
         // getRandomQuestion
     void showRandomQuestion() {
-        Question expected = new Question("Вопрос 1", "Ответ 1");
-        Collection<Question> questionCollection = List.of(expected);
-        javaQuestionService.add((Question) questionCollection);
+        javaQuestionService = new JavaQuestionService();
+        Question expected = javaQuestionService.add("Вопрос 1", "Ответ 1");
+        javaQuestionService.add(expected);
         Question actual = javaQuestionService.getRandomQuestion();
         assertThat(actual).isEqualTo(expected);
     }
